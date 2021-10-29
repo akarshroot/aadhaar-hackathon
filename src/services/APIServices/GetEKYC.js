@@ -1,6 +1,6 @@
 import xml2js from 'xml2js'
 
-function getName(txnID, uid, otp) {
+function getData(txnID, uid, otp, callback) {
     const uri = "https://stage1.uidai.gov.in/onlineekyc/getEkyc/"
     const body = {
         uid: uid,
@@ -13,24 +13,32 @@ function getName(txnID, uid, otp) {
     xhr.setRequestHeader("Content-Type", "application/json")
     xhr.send(JSON.stringify(body));
     xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) setName(xhr.responseText)
+        if (xhr.readyState === 4 && xhr.status === 200) setData(xhr.responseText, callback)
     }
 }
 
-function setName(data) {
+function setData(data, callback) {
     console.log(data);
-    let check = data.split('"status":"')[1].split('","eKycString"')[0]
+    let check = JSON.parse(data)
     console.log("check: " + check);
     data = JSON.parse(data)
     data = data.eKycString
     data = xml2js.parseString(data, function (err, res) {
+        console.log(check);
         console.log(res);
-        if(check == "Y" || check == "y")
-            document.getElementById("name").innerHTML = "Welcome " + res.KycRes.UidData[0].Poi[0].$.name
+        if(check.status == "Y" || check.status == "y")
+        {
+            const name = res.KycRes.UidData[0].Poi[0].$.name
+            const phn = res.KycRes.UidData[0].Poi[0].$.phone
+            sessionStorage.setItem("name", name)
+            sessionStorage.setItem("phone-number", phn)
+            document.getElementById("name").innerHTML = "Welcome " + name
+        }  
         else
-            document.getElementById("err").innerHTML = "Error: " + res.Resp.$.err
+            document.getElementById("err").innerHTML = "Error: " + check.errCode
 
     })
+    callback()
 }
 
-export default getName
+export default getData
