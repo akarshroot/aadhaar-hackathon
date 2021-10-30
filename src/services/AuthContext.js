@@ -88,7 +88,6 @@ export function AuthProvider({ children }) {
             setCurrentUser(user)
             setLoading(false)
             console.log(userPhn);
-            console.log("photo" + auth.currentUser.photoURL);
             if(auth.currentUser) {setUpRequestListener(auth.currentUser.photoURL)}
         })
     }, [])

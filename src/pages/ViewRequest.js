@@ -33,7 +33,6 @@ function ViewRequest() {
             <button type="start" className="btn-dashboard btn btn-primary btn-block">Accept</button><br />
             <button type="start" style={{backgroundColor: "#cc3300"}} className="btn-dashboard btn btn-primary btn-block">Reject</button><br />
             <button type="start" style={{backgroundColor: "#ffcc00", color: "black"}} className="btn-dashboard btn btn-primary btn-block">Mark Fraudulent</button><br />
-
         </div>
     )
 }
