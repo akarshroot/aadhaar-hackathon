@@ -14,24 +14,17 @@ export function useAuth() {
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState("");
     const [loading, setLoading] = useState(true);
-
-    const [requestorUID, setRequestorUID] = useState();
-    const [requestorPhnNo, setRequestorPhnNo] = useState(0);
-    const [docsAvailable, setDocsStatus] = useState(false);
-    const [approvalPending, setApprovalStatus] = useState(false);
-    const [requesteeUID, setRequesteeUID] = useState();
-    const [requesteePhnNo, setRequesteePhnNo] = useState();
-
-    
+        
     const [userName, setUserName] = useState(sessionStorage.getItem("name"))
     const [userPhn, setUserPhone] = useState(sessionStorage.getItem("phone-number"))
 
-    async function initLogging() {
+    function initLogging() {
         try {
             if(auth.currentUser == null)
             {
-                await initLoggerRegistration(auth)
-                await updateLogs()
+                initLoggerRegistration(auth).then(() => {
+                    updateSignInLogs()
+                })
                 console.log("currUser(POST Block): " + auth.currentUser);
             }
         } catch (err) {
@@ -39,7 +32,7 @@ export function AuthProvider({ children }) {
         }
     }
 
-    async function updateLogs() {
+    async function updateSignInLogs() {
         setUserName(sessionStorage.getItem("name"))
         setUserPhone(sessionStorage.getItem("phone-number"))
         console.log(userName + " " + userPhn);
@@ -74,7 +67,8 @@ export function AuthProvider({ children }) {
 
     const value = {
         currentUser,
-        initLogging
+        initLogging,
+        userPhn
     }
     return (
         <AuthContext.Provider value={value}>

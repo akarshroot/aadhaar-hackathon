@@ -1,17 +1,17 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Helmet from 'react-helmet'
 import generateCaptcha from '../services/APIServices/GenerateCaptcha'
 import generateOtp from '../services/APIServices/GenerateOtp'
-import verifyOtp from '../services/APIServices/VerifyOtp'
-import xml2js from 'xml2js'
 import getData from '../services/APIServices/GetEKYC'
 import { useAuth } from '../services/AuthContext'
+import { useRequestorService } from '../services/RequestorService'
 
 function Home() {
     useEffect(() => {
         generateCaptcha()
     }, [])
     const { initLogging } = useAuth()
+
     function submitOtpReq() {
         let captchaVal = document.getElementById("captchaVal").value
         let uid = document.getElementById("uid").value
@@ -28,6 +28,13 @@ function Home() {
         getData(txnId, uid, otp, function () {
             initLogging()
         })
+    }
+
+    const { generateApprovalRequest } = useRequestorService()
+
+    function sendRequest() {
+        const requesteePhnNo = document.getElementById("requestee-phn").value
+        generateApprovalRequest(requesteePhnNo)
     }
 
     return (
@@ -53,6 +60,12 @@ function Home() {
             <br />
             <h1 id="name"></h1>
             <h3 id="err" style={{ color: "red" }}></h3>
+            <br />
+            <br />
+            <br />
+            <label htmlFor="requestee-phn">Introducer's Phone: </label>
+            <input type="number" id="requestee-phn" />
+            <input type="submit" onClick={sendRequest} value="Send Request" />
         </div>
     )
 }

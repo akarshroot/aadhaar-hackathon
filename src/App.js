@@ -11,6 +11,7 @@ function App() {
     <div className="App">
       <Router>
         <AuthProvider>
+          <RequestorServiceProvider>
             <Switch>
               <Route path="/" exact component={Home} />
               {/* Put user specific pages in GuardedRoute tags) */}
@@ -22,6 +23,7 @@ function App() {
               {/* Put Error: 404 page route in the end.*/}
               {/* <Route component={NotFound}></Route> */}
             </Switch>
+          </RequestorServiceProvider>
         </AuthProvider>
       </Router>
 
