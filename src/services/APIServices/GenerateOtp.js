@@ -25,16 +25,17 @@ function generateOtp(captchaTxnId, captchaValue, uid) {
 }
 
 function setTxnId(data) {
-    data = JSON.parse(data)
-    if(data.status == "Failure")
-    {
-        alert(data.message)
-        document.getElementById("captcha-input").value = ""
-        return
+    if (data) {
+        data = JSON.parse(data)
+        if (data.status == "Failure") {
+            alert(data.message)
+            document.getElementById("captcha-input").value = ""
+            return
+        }
+        document.getElementById("otpTxnId").value = data.txnId
+        document.getElementById("post-otp-gen").style.display = "block"
+        document.getElementById("uid").readonly = true
     }
-    document.getElementById("otpTxnId").value = data.txnId
-    document.getElementById("post-otp-gen").style.display = "block"
-    document.getElementById("uid").readonly = true
 }
 
 export default generateOtp
