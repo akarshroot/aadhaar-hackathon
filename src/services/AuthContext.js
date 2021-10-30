@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { auth, initLoggerRegistration, db, addDocRef, collectionRef, setDocRef, docRef, updateProfileData } from "./Firebase";
+import { auth, initLoggerRegistration, db, addDocRef, collectionRef, setDocRef, docRef, updateProfileData, onSnapshotRef } from "./Firebase";
 import { useRequestorService } from "./RequestorService";
 import requestIp from 'request-ip';
+import { useHistory } from "react-router";
 
 
 
@@ -14,14 +15,16 @@ export function useAuth() {
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState("");
     const [loading, setLoading] = useState(true);
-        
+    const [initUserLoading, setInitUserLoading] = useState(false);
+    const [pendingRequests, setPendingRequests] = useState([]);
+    const history = useHistory()
+
     const [userName, setUserName] = useState(sessionStorage.getItem("name"))
     const [userPhn, setUserPhone] = useState(sessionStorage.getItem("phone-number"))
 
     function initLogging() {
         try {
-            if(auth.currentUser == null)
-            {
+            if (auth.currentUser == null) {
                 initLoggerRegistration(auth).then(() => {
                     updateSignInLogs()
                 })
@@ -32,28 +35,50 @@ export function AuthProvider({ children }) {
         }
     }
 
+    function setUpRequestListener(userPhn) {
+        const unsub = onSnapshotRef(docRef(db, "requests", userPhn), (doc) => {
+            console.log("Pending Requests Array: ", doc.data())
+            setPendingRequests(doc.data())
+        });
+        console.log("logging");
+    }
+
     async function updateSignInLogs() {
         setUserName(sessionStorage.getItem("name"))
         setUserPhone(sessionStorage.getItem("phone-number"))
-        console.log(userName + " " + userPhn);
+        const localUserName = sessionStorage.getItem("name")
+        const localUserPhn = sessionStorage.getItem("phone-number")
+        console.log(localUserName + " " + localUserPhn);
         await updateProfileData(auth.currentUser, {
-          displayName: userName
+            displayName: localUserName,
+            photoURL: localUserPhn
         }).then(() => {
-          // Profile updated!
-          // ...
-          console.log(auth.currentUser.displayName);
+            // Profile updated!
+            // ...
+            console.log(auth.currentUser.displayName);
+            console.log(auth.currentUser.photoURL);
+            // setUpRequestListener(localUserPhn)
 
         }).catch((error) => {
-          // An error occurred
-          // ...
-          console.error(error);
+            // An error occurred
+            // ...
+            console.error(error);
         });
         const date = new Date()
         const docReferer = await setDocRef(docRef(db, "sign-in-logs", auth.currentUser.uid), {
-            "phn_no": userPhn,
+            "phn_no": localUserPhn,
             "creation_date_time": auth.currentUser.metadata.creationTime,
             "last_login_date_time": date.toISOString()
         });
+        setUpRequestListener(localUserPhn)
+        history.push("/dashboard")
+        setInitUserLoading(false)
+    }
+
+    function signout() {
+        auth.signOut()
+        sessionStorage.clear()
+        history.push("/")
     }
 
 
@@ -62,13 +87,21 @@ export function AuthProvider({ children }) {
             console.log(user);
             setCurrentUser(user)
             setLoading(false)
+            console.log(userPhn);
+            console.log("photo" + auth.currentUser.photoURL);
+            if(auth.currentUser) {setUpRequestListener(auth.currentUser.photoURL)}
         })
     }, [])
 
     const value = {
         currentUser,
         initLogging,
-        userPhn
+        userPhn,
+        signout,
+        initUserLoading, 
+        setInitUserLoading,
+        loading,
+        pendingRequests
     }
     return (
         <AuthContext.Provider value={value}>

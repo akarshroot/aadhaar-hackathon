@@ -1,0 +1,40 @@
+.btn-dashboard {
+    margin: 15px;
+    width: 200px;
+}
+
+.sections {
+    display: flex;
+    flex-direction: row;
+    padding-top: 20px;
+}
+
+.functions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+}
+
+.pending-requests {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    border-radius: 12px;
+    border: 2px solid black;
+    margin: 15px;
+}
+
+@media screen and (max-width: 840px) {
+    .sections {
+        flex-direction: column;
+    }
+    .functions{
+        width: calc(100% - 30px);
+    }
+    .pending-requests {
+        width: calc(100% - 30px);
+    }
+
+}

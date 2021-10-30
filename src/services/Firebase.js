@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { getAuth, signInAnonymously, updateProfile } from 'firebase/auth';
-import { getFirestore, addDoc, collection, doc, setDoc, arrayUnion, updateDoc, getDoc } from 'firebase/firestore';
+import { getFirestore, addDoc, collection, doc, setDoc, arrayUnion, updateDoc, getDoc, onSnapshot } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import firebaseConfig from "./Environment";
@@ -20,3 +20,4 @@ export const getDocRef = getDoc
 export const updateProfileData = updateProfile
 export const appendToArray = arrayUnion
 export const updateDocRef = updateDoc
+export const onSnapshotRef = onSnapshot

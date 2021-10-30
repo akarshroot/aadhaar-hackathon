@@ -1,0 +1,20 @@
+#step2 {
+    display: none;
+}
+
+#introducer-phn {
+    width: 200px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+
+#user-phn {
+    width: 200px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+
+#subtext {
+    color: gray;
+    font-size: small;
+}

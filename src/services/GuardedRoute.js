@@ -1,11 +1,10 @@
 import React from 'react';
 import { Route, Redirect } from "react-router-dom";
-// import { useAuth } from '../AuthContext'
+import { useAuth } from './AuthContext'
 
 
 function GuardedRoute({ component: Component, auth, ...rest }){
-    // const { currentUser } = useAuth()
-    const currentUser = true;
+    const { currentUser } = useAuth()
     return(
     <Route {...rest} render={(props) => (
         currentUser

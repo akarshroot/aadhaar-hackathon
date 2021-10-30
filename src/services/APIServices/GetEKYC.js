@@ -32,10 +32,10 @@ function setData(data, callback) {
             const phn = res.KycRes.UidData[0].Poi[0].$.phone
             sessionStorage.setItem("name", name)
             sessionStorage.setItem("phone-number", phn)
-            document.getElementById("name").innerHTML = "Welcome " + name
+            console.log("session data is set");
         }  
         else
-            document.getElementById("err").innerHTML = "Error: " + check.errCode
+            alert(check.errCode)
 
     })
     callback()

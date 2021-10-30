@@ -17,8 +17,8 @@ function generateCaptcha() {
 function changeCaptcha(data) {
     data = JSON.parse(data)
     let txnID = data.captchaTxnId
-    document.getElementById("img").src = "data:image/png;base64, " + data.captchaBase64String
-    document.getElementById("img").alt = txnID
+    document.getElementById("captcha-img").src = "data:image/png;base64, " + data.captchaBase64String
+    document.getElementById("captcha-img").alt = txnID
 }
 
 export default generateCaptcha
