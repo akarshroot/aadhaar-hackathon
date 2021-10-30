@@ -13,14 +13,24 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 50%;
+    width: 33%;
 }
 
 .pending-requests {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 50%;
+    width: 33%;
+    border-radius: 12px;
+    border: 2px solid black;
+    margin: 15px;
+}
+
+.pending-consents {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 33%;
     border-radius: 12px;
     border: 2px solid black;
     margin: 15px;
@@ -34,6 +44,9 @@
         width: calc(100% - 30px);
     }
     .pending-requests {
+        width: calc(100% - 30px);
+    }
+    .pending-consents {
         width: calc(100% - 30px);
     }
 

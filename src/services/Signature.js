@@ -11,8 +11,16 @@ function getSignature() {
     return signature
 }
 
-function encryptData() {
-    
+function encryptData(data, public_key) {
+    const key = new NodeRSA(public_key)
+    let encryptedData = key.encrypt(data, 'base64')
+    return encryptedData
 }
 
-export { getSignature, encryptData }
+function decryptData(data, private_key) {
+    const key = new NodeRSA(private_key)
+    let decryptedData = key.decrypt(data, 'utf-8')
+    return decryptedData
+}
+
+export { getSignature, encryptData, decryptData }

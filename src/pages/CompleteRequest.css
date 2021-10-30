@@ -1,0 +1,11 @@
+.complete-address-container {
+    margin-top: 20px;
+}
+
+.file-block {
+    align-items: left;
+    text-align: left;
+    width: fit-content;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}

@@ -39,7 +39,7 @@ function Login() {
                             <div className="bg-white rounded shadow-5-strong p-5">
                                 <div className="form-outline mb-4">
                                     <label className="form-label" htmlFor="form1Example2">Enter you Aadhaar Number: </label>
-                                    <input type="text" id="uid" placeholder="Aadhaar Number" className="form-control" /><br />
+                                    <input type="text" id="uid" placeholder="Aadhaar Number" className="form-control" autoComplete="new-uid"/><br />
                                     <div className="captcha-block">
                                         <input type="text" id="captcha-input" placeholder="Captcha" className="form-control" />
                                         <img id="captcha-img" src="" alt="" />

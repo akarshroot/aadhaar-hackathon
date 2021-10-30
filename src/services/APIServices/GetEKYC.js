@@ -30,8 +30,10 @@ function setData(data, callback) {
         {
             const name = res.KycRes.UidData[0].Poi[0].$.name
             const phn = res.KycRes.UidData[0].Poi[0].$.phone
+            const addressObj = res.KycRes.UidData[0].Poa[0].$
             sessionStorage.setItem("name", name)
             sessionStorage.setItem("phone-number", phn)
+            sessionStorage.setItem("address", JSON.stringify(addressObj))
             console.log("session data is set");
         }  
         else

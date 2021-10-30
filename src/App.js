@@ -12,6 +12,7 @@ import { LoopCircleLoading } from 'react-loadingg';
 import ChangeAddress from './pages/ChangeAddress';
 import ViewRequest from './pages/ViewRequest';
 import { RequesteeServiceProvider } from './services/RequesteeService';
+import CompleteRequest from './pages/CompleteRequest';
 
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
             <GuardedRoute path="/dashboard" exact component={Dashboard} />
             <GuardedRoute path="/changeaddress" exact component={ChangeAddress} />
             <GuardedRoute path="/request" exact component={ViewRequest} />
+            <GuardedRoute path="/completerequest" exact component={CompleteRequest} />
           {/* <GuardedRoute path="/changeaddress" exact component={ChangeAddress} /> */}
           {/* <GuardedRoute path="/request" exact component={Request} /> */}
 

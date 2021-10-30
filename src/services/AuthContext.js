@@ -17,6 +17,7 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true);
     const [initUserLoading, setInitUserLoading] = useState(false);
     const [pendingRequests, setPendingRequests] = useState([]);
+    const [pendingConsents, setPendingConsents] = useState([]);
     const history = useHistory()
 
     const [userName, setUserName] = useState(sessionStorage.getItem("name"))
@@ -40,7 +41,15 @@ export function AuthProvider({ children }) {
             console.log("Pending Requests Array: ", doc.data())
             setPendingRequests(doc.data())
         });
-        console.log("logging");
+        console.log("logging requests");
+    }
+
+    function setUpConsentListener(userPhn) {
+        const unsub = onSnapshotRef(docRef(db, "consents", userPhn), (doc) => {
+            console.log("Pending Consents Array: ", doc.data())
+            setPendingConsents(doc.data())
+        });
+        console.log("logging consents");
     }
 
     async function updateSignInLogs() {
@@ -88,7 +97,10 @@ export function AuthProvider({ children }) {
             setCurrentUser(user)
             setLoading(false)
             console.log(userPhn);
-            if(auth.currentUser) {setUpRequestListener(auth.currentUser.photoURL)}
+            if (auth.currentUser) { 
+                setUpRequestListener(auth.currentUser.photoURL) 
+                setUpConsentListener(auth.currentUser.photoURL) 
+            }
         })
     }, [])
 
@@ -97,10 +109,11 @@ export function AuthProvider({ children }) {
         initLogging,
         userPhn,
         signout,
-        initUserLoading, 
+        initUserLoading,
         setInitUserLoading,
         loading,
-        pendingRequests
+        pendingRequests,
+        pendingConsents
     }
     return (
         <AuthContext.Provider value={value}>
