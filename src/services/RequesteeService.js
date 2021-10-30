@@ -19,6 +19,14 @@ export function RequesteeServiceProvider({ children }) {
 
     }
 
+    function rejectConsent(requestorPhn, txnId, ) {
+
+    }
+
+    function grantConsent(requestorPhn, txnId, ) {
+
+    }
+
     const value = {
         
     }

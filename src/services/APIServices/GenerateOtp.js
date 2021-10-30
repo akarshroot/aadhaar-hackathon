@@ -18,7 +18,7 @@ function generateOtp(captchaTxnId, captchaValue, uid) {
     xhr.setRequestHeader("Content-Type", "application/json")
     xhr.setRequestHeader("Accept-Language", "en_in")
     xhr.send(JSON.stringify(body));
-    xhr.onreadystatechange = function () {
+    xhr.onload = function () {
         console.log(this.responseText);
         setTxnId(this.responseText, txnId)
     }

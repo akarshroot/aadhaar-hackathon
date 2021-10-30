@@ -8,7 +8,7 @@ import './Login.css'
 function Login() {
     const { initLogging, signout, initUserLoading, setInitUserLoading, currentUser } = useAuth()
     useEffect(() => {
-        if(currentUser) {
+        if (currentUser) {
             window.location.replace("/dashboard")
         }
         generateCaptcha()
@@ -50,7 +50,7 @@ function Login() {
                                 <div id="post-otp-gen" className="post-otp-gen">
                                     <input type="hidden" id="otpTxnId" placeholder="" className="form-control" />
                                     <input type="number" id="otp-value" placeholder="OTP" className="form-control" />
-                                    <button type="start" id="final-submit" className="btn btn-primary btn-block" onClick={submitOtp} disabled={initUserLoading}>{initUserLoading? <>Please wait...</>:<>Submit</>}</button>
+                                    <button type="start" id="final-submit" className="btn btn-primary btn-block" onClick={submitOtp} disabled={initUserLoading}>{initUserLoading ? <>Please wait...</> : <>Submit</>}</button>
                                 </div>
                             </div>
                         </div>
