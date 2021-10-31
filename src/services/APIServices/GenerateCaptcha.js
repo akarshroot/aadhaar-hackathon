@@ -8,7 +8,6 @@ function generateCaptcha() {
     const xhr = new XMLHttpRequest()
     xhr.open('POST', uri, true);
     xhr.setRequestHeader("Content-Type", "application/json")
-    xhr.setRequestHeader("Access-Control-Allow-Origin", "*")
     xhr.send(JSON.stringify(body));
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) changeCaptcha(xhr.responseText)

@@ -6,6 +6,53 @@
     align-items: left;
     text-align: left;
     width: fit-content;
+    margin-bottom: 20px;
     margin-left: 50%;
     transform: translateX(-50%);
+}
+
+.post-decrypt {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+
+.edit-address-sec-1 input {
+    width: 200px;
+}
+
+.edit-address-sec-2 input {
+    width: 200px;
+}
+
+.edit-address-sec-3 input {
+    width: 200px;
+}
+
+.edit-address-sec-1 {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.edit-address-sec-2 {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+}
+
+.edit-address-sec-3 {
+    width: fit-content;
+    margin-left: 50%;
+    transform: translateX(-90%);
+    display: flex;
+    flex-direction: row;
+    margin-top: 15px;
 }

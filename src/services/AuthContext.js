@@ -80,6 +80,7 @@ export function AuthProvider({ children }) {
             "last_login_date_time": date.toISOString()
         });
         setUpRequestListener(localUserPhn)
+        setUpConsentListener(localUserPhn)
         history.push("/dashboard")
         setInitUserLoading(false)
     }
