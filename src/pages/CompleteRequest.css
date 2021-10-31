@@ -56,3 +56,11 @@
     flex-direction: row;
     margin-top: 15px;
 }
+
+#done {
+    display: none;
+}
+
+#rejected {
+    display: none;
+}

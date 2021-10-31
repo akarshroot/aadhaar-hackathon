@@ -3,6 +3,7 @@ import { useAuth } from "./AuthContext";
 import { appendToArray, db, docRef, setDocRef, updateDocRef, getDocRef, auth } from "./Firebase";
 import { getSignature } from "./Signature";
 import { v4 as uuidv4 } from 'uuid'
+import { useHistory } from "react-router";
 
 
 const RequestorService = React.createContext()
@@ -14,6 +15,7 @@ export function useRequestorService() {
 export function RequestorServiceProvider({ children }) {
 
     const { currentUser, setCurrentUser, userPhn } = useAuth();
+    const history = useHistory();
 
     async function logRequest(requesteePhnNo, signature, userPhn) {
         const date_time = new Date()
@@ -103,8 +105,79 @@ export function RequestorServiceProvider({ children }) {
         logRequest(requesteePhnNo, signatureData.publicKey, userPhn)
     }
 
+    async function completeRequest(txn) {
+        let existenceCheck = docRef(db, "consents", userPhn)
+        const docSnap = await getDocRef(existenceCheck)
+        if (docSnap.exists()) {
+            let data = docSnap.data()
+            let copy = {}
+            if(data.hasOwnProperty("pending"))
+            {
+                copy = data.pending.txn
+            }
+            delete data.pending.txn
+            if(!data.hasOwnProperty("rejected"))
+            {
+                data["rejected"] = {}
+            }
+            if(!data.hasOwnProperty("completed"))
+            {
+                data["completed"] = {}
+            }
+            data.completed[`${txn}`] = copy
+            let existenceCheckRejectedUpdate = docRef(db, "consents", userPhn)
+            const docSnapUpdate = await getDocRef(existenceCheckRejectedUpdate)
+            if (docSnapUpdate.exists()) {
+                const docReferer = setDocRef(docRef(db, "requests", userPhn), {
+                    pending: data.pending,
+                    approved: data.approved,
+                    rejected: data.rejected
+                });
+            }
+            history.push("/dashboard")
+        }
+
+    }
+
+    async function rejectRequest(txn) {
+        let existenceCheck = docRef(db, "consents", userPhn)
+        const docSnap = await getDocRef(existenceCheck)
+        if (docSnap.exists()) {
+            let data = docSnap.data()
+            let copy = {}
+            if(data.hasOwnProperty("pending"))
+            {
+                copy = data.pending.txn
+            }
+            delete data.pending.txn
+            if(!data.hasOwnProperty("rejected"))
+            {
+                data["rejected"] = {}
+            }
+            if(!data.hasOwnProperty("completed"))
+            {
+                data["completed"] = {}
+            }
+            data.rejected[`${txn}`] = copy
+            let existenceCheckRejectedUpdate = docRef(db, "consents", userPhn)
+            const docSnapUpdate = await getDocRef(existenceCheckRejectedUpdate)
+            if (docSnapUpdate.exists()) {
+                const docReferer = setDocRef(docRef(db, "consents", userPhn), {
+                    pending: data.pending,
+                    approved: data.approved,
+                    rejected: data.rejected
+                });
+            }
+            history.push("/dashboard")
+        }
+
+    }
+
+
     const value = {
-        generateApprovalRequest
+        generateApprovalRequest,
+        rejectRequest,
+        completeRequest
     }
     return (
         <RequestorService.Provider value={value}>

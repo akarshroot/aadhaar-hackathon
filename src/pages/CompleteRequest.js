@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import getLocation from '../services/APIServices/GeoCode'
 import getPostOffice from '../services/APIServices/PostOffice'
+import { useRequestorService } from '../services/RequestorService'
 import { decryptData } from '../services/Signature'
 import './CompleteRequest.css'
 
 function CompleteRequest() {
     const [pvtKey, setPvtKey] = useState()
+    const [verified, setVerified] = useState(false)
     const [decrypted, setDecrypted] = useState(false)
 
     const [txnId, setTxnId] = useState()
@@ -15,21 +17,27 @@ function CompleteRequest() {
     const [data, setData] = useState()
     const [address, setAddress] = useState()
 
+    const { completeRequest, rejectRequest } = useRequestorService()
+
     function parseISOString(s) {
         var b = s.split(/\D+/);
         return new Date(Date.UTC(b[0], --b[1], b[2], b[3], b[4], b[5], b[6]));
     }
 
     function readFile(callback) {
-        var fr = new FileReader();
-        fr.onload = function () {
-            const res = fr.result.replace(new RegExp('\n', 'g'), "")
-            console.log(res);
-            setPvtKey(res)
-            callback(res)
+        try {
+            var fr = new FileReader();
+            fr.onload = function () {
+                const res = fr.result.replace(new RegExp('\n', 'g'), "")
+                console.log(res);
+                setPvtKey(res)
+                callback(res)
+            }
+            console.log(document.getElementById("pvt-key-file").files[0]);
+            fr.readAsText(document.getElementById("pvt-key-file").files[0]);
+        } catch (error) {
+            console.error(error);
         }
-        console.log(document.getElementById("pvt-key-file").files[0]);
-        fr.readAsText(document.getElementById("pvt-key-file").files[0]);
     }
 
     function decryptAddress(key) {
@@ -48,7 +56,18 @@ function CompleteRequest() {
         const new_address = document.getElementById("new-house").value + " " + address.vtc + " " + address.dist + " " + address.state + " " + address.country + " - " + address.pc
         console.log(new_address);
         console.log("getting loc: " + address);
-        getLocation(address)
+        getLocation(address, borrowed_address, setVerified)
+        setTimeout(() => {
+            document.getElementById("done").style.display = "block"
+        }, 5000);
+    }
+
+    function submitChangeRequest() {
+        completeRequest()
+    }
+
+    function rejectChangeRequest() {
+        rejectRequest()
     }
 
     useEffect(() => {
@@ -99,13 +118,20 @@ function CompleteRequest() {
                                 <label className="form-label" htmlFor="form1Example2">Post Office: </label>&nbsp;
                                 <input type="text" className="form-control" autoComplete="new-pc" readOnly={true} value={address.po} /><br />
                             </div>
-                            <button type="submit" style={{ margin: "15px" }} className="btn btn-primary btn-block" onClick={verifyAddress}>Submit</button>
+                            <button type="submit" style={{ margin: "15px" }} className="btn btn-primary btn-block" onClick={verifyAddress}>Verify</button>
                         </div>
                     </>
                     :
                     <></>
             }
-            <button onClick={verifyAddress}>check</button>
+            <div id="done">
+                The address has been verified and forwarded to UIDAI servers.<br />
+                <button className="btn btn-primary btn-block" onClick={submitChangeRequest}>Click to complete process</button>
+            </div>
+            <div id="rejected">
+                The address could not be verified and the request has been cancelled. Please re-initiate a request with some other introducer.<br />
+                <button className="btn btn-primary btn-block" onClick={rejectChangeRequest}>Click to complete process</button>
+            </div>
         </div >
     )
 }

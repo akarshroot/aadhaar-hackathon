@@ -62,7 +62,7 @@ function Dashboard() {
                                 <li>Rejected By: {pendingConsents.rejected[key].requestee_name}</li>
                                 <span id="subtext" style={{color: "white"}}>Please contact your introducer and request him/her to approve your request.</span>
                             </ul>
-                        )) : <>No request</>
+                        )) : <></>
                     }
                 </div>
             </div>

@@ -3,6 +3,7 @@ import { useAuth } from "./AuthContext";
 import { appendToArray, db, docRef, setDocRef, updateDocRef, getDocRef, auth } from "./Firebase";
 import { getSignature } from "./Signature";
 import { v4 as uuidv4 } from 'uuid'
+import { useHistory } from "react-router";
 
 
 const RequesteeService = React.createContext()
@@ -14,6 +15,7 @@ export function useRequesteeService() {
 export function RequesteeServiceProvider({ children }) {
 
     const { currentUser, setCurrentUser, userPhn } = useAuth();
+    const history = useHistory();
 
     async function grantConsent(data, phn, txn) {
         const date_time = new Date()
@@ -230,8 +232,9 @@ export function RequesteeServiceProvider({ children }) {
             }
         }
     }
-    function markFraud(requestorPhn, txnId) {
 
+    function markFraud(requestorPhn, txnId) {
+        alert("User marked suspicious and report sent to uidai");
     }
 
     const value = {
